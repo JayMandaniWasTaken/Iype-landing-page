@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowDown, X } from "lucide-react";
 import logoImage from "../../assets/logo.png";
+import heroAthleteImage from "../../assets/hero-athlete.png";
 
 export function Hero() {
   const PRODUCTS = [
@@ -68,9 +69,44 @@ export function Hero() {
   };
 
   return (
-    <section className="bg-black min-h-[90vh] md:min-h-screen text-white flex flex-col font-['Inter',_sans-serif] relative overflow-hidden">
-      {/* Navigation */}
-      <nav className="flex justify-between items-center  md:px-12 w-full z-20 relative">
+    <section className="bg-black min-h-[90vh] md:min-h-screen text-white flex flex-col font-['Inter',_sans-serif] relative overflow-hidden" style={{ isolation: 'isolate' }}>
+      {/* Full-bleed athlete image — spans behind the navbar */}
+      <div className="absolute inset-0 w-1/2 h-full z-0 pointer-events-none" aria-hidden="true">
+        <img
+          src={heroAthleteImage}
+          alt="Athlete"
+          className="absolute inset-0 w-full h-full object-cover object-top"
+        />
+        {/* Red duotone overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(135deg, rgba(180,0,0,0.35) 0%, rgba(80,0,0,0.2) 40%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0) 100%)",
+            mixBlendMode: "multiply",
+          }}
+        />
+        {/* Grain / noise texture */}
+        <div
+          className="absolute inset-0 opacity-[0.12] pointer-events-none"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")`,
+            backgroundSize: "200px 200px",
+          }}
+        />
+        {/* Fade to black on the right edge */}
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(to right, transparent 55%, rgba(0,0,0,0.9) 100%)" }}
+        />
+        {/* Fade to black at the bottom */}
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 30%)" }}
+        />
+      </div>
+
+      {/* Navigation — sits above the image */}
+      <nav className="flex justify-between items-center md:px-12 w-full z-20 relative">
         <div className="flex items-center">
           <img src={logoImage} alt="IYPE Athletiq Logo" className="h-[80px] md:h-[140px] w-auto" />
         </div>
@@ -84,7 +120,7 @@ export function Hero() {
         <div>
           <button
             onClick={() => setIsDialogOpen(true)}
-            className="border border-[#E60000] text-white bg-transparent hover:bg-[#E60000] hover:text-white transition-colors px-6 py-2 rounded-full text-xs uppercase tracking-widest font-medium"
+            className="bg-[#E60000] text-white hover:bg-red-700 transition-colors px-6 py-2 rounded-full text-xs uppercase tracking-widest font-medium"
           >
             Join Waitlist
           </button>
@@ -94,31 +130,20 @@ export function Hero() {
       {/* Main Content */}
       <div className="flex-1 w-full relative z-10 flex flex-col md:flex-row pb-24">
 
-        {/* Left Typography */}
-        <div className="w-full md:w-1/2 flex flex-col justify-center px-6 md:px-12 lg:px-24 z-20 pt-12 md:pt-0">
-          <h1 className="font-['Bebas_Neue',_sans-serif] text-7xl md:text-8xl lg:text-[130px] leading-[0.85] tracking-tight flex flex-col">
+        {/* Left — spacer so typography sits on the right (image is absolute behind) */}
+        <div className="w-full md:w-1/2 relative h-[55vw] md:h-auto" />
+
+        {/* Right — Typography */}
+        <div className="w-full md:w-1/2 flex flex-col justify-center items-center text-center px-6 md:px-12 lg:px-16 z-20 pt-10 md:pt-0">
+          <h1 className="font-['Bebas_Neue',_sans-serif] text-7xl md:text-8xl lg:text-[110px] leading-[0.88] tracking-tight flex flex-col items-center">
             <span><span className="text-[#E60000]">I</span>NTENSIFY</span>
             <span><span className="text-[#E60000]">Y</span>OUR</span>
             <span><span className="text-[#E60000]">P</span>OWER &</span>
             <span><span className="text-[#E60000]">E</span>NDURANCE</span>
           </h1>
-          <p className="mt-8 text-gray-400 text-sm md:text-base font-light tracking-wide max-w-[280px] leading-relaxed">
+          <p className="mt-8 text-gray-400 text-sm md:text-base font-light tracking-wide leading-relaxed">
             Professional grade essentials<br />for the relentless
           </p>
-        </div>
-
-        {/* Right Image Container */}
-        <div className="w-full md:w-1/2 absolute right-0 top-0 h-full flex justify-end items-end z-10 overflow-hidden md:relative md:h-auto">
-          {/* Red Background Shape */}
-          <div className="absolute right-0 top-0 w-[60%] md:w-[70%] h-[100%] bg-[#E60000] z-0 skew-x-[-10deg] translate-x-10"></div>
-
-          {/* Boxer Image */}
-          <img
-            src="https://images.unsplash.com/photo-1770616756218-f0abe20da404?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtdXNjdWxhciUyMG1hbiUyMGJveGluZyUyMHJlZCUyMGJhY2tncm91bmR8ZW58MXx8fHwxNzczMTI5MzgyfDA&ixlib=rb-4.1.0&q=80&w=1080"
-            alt="Boxer"
-            className="relative z-10 object-cover w-full h-[80%] md:h-full max-w-[600px] object-top grayscale-[20%]"
-            style={{ maskImage: 'linear-gradient(to top, transparent 0%, black 15%)', WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 15%)' }}
-          />
         </div>
       </div>
 
