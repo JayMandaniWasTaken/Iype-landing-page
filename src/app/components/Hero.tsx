@@ -70,8 +70,23 @@ export function Hero() {
 
   return (
     <section className="bg-black min-h-[90vh] md:min-h-screen text-white flex flex-col font-['Inter',_sans-serif] relative overflow-hidden" style={{ isolation: 'isolate' }}>
-      {/* Full-bleed athlete image — spans behind the navbar */}
-      <div className="absolute inset-0 w-1/2 h-full z-0 pointer-events-none" aria-hidden="true">
+      {/* Full-bleed athlete image — spans behind the navbar with soft crop */}
+      <div
+        className="absolute inset-0 w-full md:w-[65%] h-full z-0 pointer-events-none"
+        aria-hidden="true"
+        style={{
+          WebkitMaskImage: `
+            linear-gradient(to right, black 0%, black 40%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.2) 80%, transparent 100%),
+            linear-gradient(to top, transparent 0%, rgba(0,0,0,0.5) 8%, black 20%)
+          `,
+          maskImage: `
+            linear-gradient(to right, black 0%, black 40%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.2) 80%, transparent 100%),
+            linear-gradient(to top, transparent 0%, rgba(0,0,0,0.5) 8%, black 20%)
+          `,
+          WebkitMaskComposite: 'destination-in',
+          maskComposite: 'intersect',
+        }}
+      >
         <img
           src={heroAthleteImage}
           alt="Athlete"
@@ -92,16 +107,6 @@ export function Hero() {
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")`,
             backgroundSize: "200px 200px",
           }}
-        />
-        {/* Fade to black on the right edge */}
-        <div
-          className="absolute inset-0"
-          style={{ background: "linear-gradient(to right, transparent 55%, rgba(0,0,0,0.9) 100%)" }}
-        />
-        {/* Fade to black at the bottom */}
-        <div
-          className="absolute inset-0"
-          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 30%)" }}
         />
       </div>
 
@@ -134,8 +139,8 @@ export function Hero() {
         <div className="w-full md:w-1/2 relative h-[55vw] md:h-auto" />
 
         {/* Right — Typography */}
-        <div className="w-full md:w-1/2 flex flex-col justify-center items-center text-center px-6 md:px-12 lg:px-16 z-20 pt-10 md:pt-0">
-          <h1 className="font-['Bebas_Neue',_sans-serif] text-7xl md:text-8xl lg:text-[110px] leading-[0.88] tracking-tight flex flex-col items-center">
+        <div className="w-full md:w-1/2 flex flex-col justify-center items-start text-left px-6 md:px-12 lg:px-16 z-20 pt-10 md:pt-0">
+          <h1 className="font-['Bebas_Neue',_sans-serif] text-7xl md:text-8xl lg:text-[110px] leading-[0.88] tracking-tight flex flex-col items-start">
             <span><span className="text-[#E60000]">I</span>NTENSIFY</span>
             <span><span className="text-[#E60000]">Y</span>OUR</span>
             <span><span className="text-[#E60000]">P</span>OWER &</span>
