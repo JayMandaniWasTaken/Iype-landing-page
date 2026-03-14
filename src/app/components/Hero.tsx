@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowDown, X } from "lucide-react";
+import { ArrowDown, X, Menu } from "lucide-react";
 import logoImage from "../../assets/logo.png";
 import heroAthleteImage from "../../assets/hero-athlete.png";
 
@@ -11,6 +11,7 @@ export function Hero() {
     "Ankle Weight System",
   ];
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -69,7 +70,8 @@ export function Hero() {
   };
 
   return (
-    <section className="bg-black min-h-[90vh] md:min-h-screen text-white flex flex-col font-['Inter',_sans-serif] relative overflow-hidden" style={{ isolation: 'isolate' }}>
+    <>
+    <section className="bg-black min-h-screen text-white flex flex-col font-['Inter',_sans-serif] relative overflow-hidden" style={{ isolation: 'isolate' }}>
       {/* Full-bleed athlete image — spans behind the navbar with soft crop */}
       <div
         className="absolute inset-0 w-full md:w-[65%] h-full z-0 pointer-events-none"
@@ -77,11 +79,13 @@ export function Hero() {
         style={{
           WebkitMaskImage: `
             linear-gradient(to right, black 0%, black 40%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.2) 80%, transparent 100%),
-            linear-gradient(to top, transparent 0%, rgba(0,0,0,0.5) 8%, black 20%)
+            linear-gradient(to top, transparent 0%, rgba(0,0,0,0.5) 8%, black 20%),
+            linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 5%, black 15%)
           `,
           maskImage: `
             linear-gradient(to right, black 0%, black 40%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.2) 80%, transparent 100%),
-            linear-gradient(to top, transparent 0%, rgba(0,0,0,0.5) 8%, black 20%)
+            linear-gradient(to top, transparent 0%, rgba(0,0,0,0.5) 8%, black 20%),
+            linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 5%, black 15%)
           `,
           WebkitMaskComposite: 'destination-in',
           maskComposite: 'intersect',
@@ -90,7 +94,7 @@ export function Hero() {
         <img
           src={heroAthleteImage}
           alt="Athlete"
-          className="absolute inset-0 w-full h-full object-cover object-top"
+          className="w-full h-full object-cover object-top md:object-contain md:object-left"
         />
         {/* Red duotone overlay */}
         <div
@@ -111,18 +115,20 @@ export function Hero() {
       </div>
 
       {/* Navigation — sits above the image */}
-      <nav className="flex justify-between items-center md:px-12 w-full z-20 relative">
+      <nav className="flex justify-between items-center px-4 md:px-12 w-full z-20 relative">
         <div className="flex items-center">
           <img src={logoImage} alt="IYPE Athletiq Logo" className="h-[80px] md:h-[140px] w-auto" />
         </div>
 
+        {/* Desktop nav links */}
         <div className="hidden md:flex gap-12 text-xs text-gray-400 uppercase tracking-widest font-medium">
           <a href="#products" className="hover:text-white transition-colors">Products</a>
           <a href="#visionary" className="hover:text-white transition-colors">Visionary</a>
           <a href="#about" className="hover:text-white transition-colors">About Us</a>
         </div>
 
-        <div>
+        {/* Desktop waitlist button */}
+        <div className="hidden md:block">
           <button
             onClick={() => setIsDialogOpen(true)}
             className="bg-[#E60000] text-white hover:bg-red-700 transition-colors px-6 py-2 rounded-full text-xs uppercase tracking-widest font-medium"
@@ -130,6 +136,15 @@ export function Hero() {
             Join Waitlist
           </button>
         </div>
+
+        {/* Mobile hamburger button */}
+        <button
+          className="md:hidden text-white p-2 z-50"
+          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </nav>
 
       {/* Main Content */}
@@ -309,5 +324,59 @@ export function Hero() {
         }
       `}</style>
     </section>
+
+    {/* Mobile navigation overlay — placed OUTSIDE the section so it covers the entire viewport */}
+    <div
+      className={`md:hidden fixed inset-0 z-[9999] transition-all duration-300 ${
+        isMobileMenuOpen
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
+      }`}
+      style={{ backgroundColor: "rgba(0,0,0,0.95)", backdropFilter: "blur(12px)" }}
+    >
+      {/* Close button */}
+      <button
+        onClick={() => setIsMobileMenuOpen(false)}
+        className="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors z-10"
+        aria-label="Close menu"
+      >
+        <X size={28} />
+      </button>
+
+      <div
+        className={`flex flex-col items-center justify-center h-full gap-8 transition-transform duration-300 ${
+          isMobileMenuOpen ? "translate-y-0" : "-translate-y-8"
+        }`}
+      >
+        <a
+          href="#products"
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="text-white text-2xl uppercase tracking-[0.25em] font-medium hover:text-[#E60000] transition-colors"
+        >
+          Products
+        </a>
+        <a
+          href="#visionary"
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="text-white text-2xl uppercase tracking-[0.25em] font-medium hover:text-[#E60000] transition-colors"
+        >
+          Visionary
+        </a>
+        <a
+          href="#about"
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="text-white text-2xl uppercase tracking-[0.25em] font-medium hover:text-[#E60000] transition-colors"
+        >
+          About Us
+        </a>
+        <button
+          onClick={() => { setIsMobileMenuOpen(false); setIsDialogOpen(true); }}
+          className="mt-4 bg-[#E60000] text-white hover:bg-red-700 transition-colors px-8 py-3 rounded-full text-sm uppercase tracking-widest font-medium"
+        >
+          Join Waitlist
+        </button>
+      </div>
+    </div>
+    </>
   );
 }
