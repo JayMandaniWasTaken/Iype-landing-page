@@ -56,7 +56,7 @@ export function Visionary() {
               href="https://neurosurgerycoach.org/"
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute top-6 right-6 z-20 w-24 h-24 md:w-32 md:h-32 bg-white/10 backdrop-blur-md rounded-full p-2 border border-white/20 shadow-2xl transition-all duration-500 hover:scale-110 group-hover:bg-white/20"
+              className="absolute top-6 right-6 z-20 w-24 h-24 md:w-32 md:h-32 bg-white/10 backdrop-blur-md rounded-full p-2 border border-white/20 shadow-2xl transition-all duration-500 hover:scale-110 group-hover:bg-white/20 animate-border-pulse"
             >
               <img
                 src={nscLogo}
