@@ -27,7 +27,7 @@ export function Visionary() {
 
           <div className="space-y-6 text-gray-400 text-sm md:text-base leading-relaxed">
             <p>
-              A Renowned World class Neurosurgeon, Researcher and Prof Dr. Iype Cherian is best known for advocating ultramicro neurosurgery along with use of robotics.
+              A Renowned World class Neurosurgeon and researcher. Prof Dr. Iype Cherian is best known for advocating ultramicro neurosurgery along with use of robotics.
             </p>
             <p>
               He innovated a surgical technique <strong>CISTERNOSTOMY</strong> A revolutionary tech for reducing intracranial pressure by opening cranial cisterns - Based on Brain's cooling & cleaning theory. - To treat severe head injury.
@@ -52,15 +52,15 @@ export function Visionary() {
             />
 
             {/* Logo Badge */}
-            <a 
-              href="https://neurosurgerycoach.org/" 
-              target="_blank" 
+            <a
+              href="https://neurosurgerycoach.org/"
+              target="_blank"
               rel="noopener noreferrer"
               className="absolute top-6 right-6 z-20 w-24 h-24 md:w-32 md:h-32 bg-white/10 backdrop-blur-md rounded-full p-2 border border-white/20 shadow-2xl transition-all duration-500 hover:scale-110 group-hover:bg-white/20"
             >
-              <img 
-                src={nscLogo} 
-                alt="Neuro Surgery Coach Logo" 
+              <img
+                src={nscLogo}
+                alt="Neuro Surgery Coach Logo"
                 className="w-full h-full object-contain filter drop-shadow-lg"
               />
             </a>
