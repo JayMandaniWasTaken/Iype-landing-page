@@ -78,14 +78,14 @@ export function Hero() {
         aria-hidden="true"
         style={{
           WebkitMaskImage: `
-            linear-gradient(to right, black 0%, black 40%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.2) 80%, transparent 100%),
-            linear-gradient(to top, transparent 0%, rgba(0,0,0,0.5) 8%, black 20%),
-            linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 5%, black 15%)
+            linear-gradient(to right, black 0%, black 25%, rgba(0,0,0,0.8) 45%, rgba(0,0,0,0.3) 70%, transparent 95%),
+            linear-gradient(to top, transparent 0%, rgba(0,0,0,0.5) 10%, black 25%),
+            linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 5%, black 20%)
           `,
           maskImage: `
-            linear-gradient(to right, black 0%, black 40%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.2) 80%, transparent 100%),
-            linear-gradient(to top, transparent 0%, rgba(0,0,0,0.5) 8%, black 20%),
-            linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 5%, black 15%)
+            linear-gradient(to right, black 0%, black 25%, rgba(0,0,0,0.8) 45%, rgba(0,0,0,0.3) 70%, transparent 95%),
+            linear-gradient(to top, transparent 0%, rgba(0,0,0,0.5) 10%, black 25%),
+            linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 5%, black 20%)
           `,
           WebkitMaskComposite: 'destination-in',
           maskComposite: 'intersect',
@@ -104,9 +104,16 @@ export function Hero() {
             mixBlendMode: "multiply",
           }}
         />
+        {/* Soft edge blend overlay */}
+        <div 
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-black/20 to-black z-10"
+          style={{ 
+            background: "linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.8) 85%, black 100%)"
+          }}
+        />
         {/* Grain / noise texture */}
         <div
-          className="absolute inset-0 opacity-[0.12] pointer-events-none"
+          className="absolute inset-0 opacity-[0.12] pointer-events-none z-20"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")`,
             backgroundSize: "200px 200px",

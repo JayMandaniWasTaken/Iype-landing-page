@@ -6,6 +6,7 @@ import product1 from "../../assets/product1.png";
 import product2 from "../../assets/product2.png";
 import product3 from "../../assets/product3.png";
 import product4 from "../../assets/product4.jpg";
+import product5 from "../../assets/product5.png";
 
 const products = [
   {
@@ -14,17 +15,27 @@ const products = [
     title: "ELITE WEIGHTED VEST",
     subtitle: "Flagship Wearable Resistance",
     description:
-      "Our flagship weighted vest takes functional training to the next level. Constructed with military-grade 1000D nylon, it distributes weight evenly across your torso to prevent lower back strain and maximize core engagement. Features a micro-adjustable tension system that conforms precisely to your body shape.",
+      "Redefine your limits with a vest designed to move with you, not against you. This flagship model features a micro-adjustable tension system that locks the weight to your center of gravity. By eliminating \"vest bounce\" and evenly distributing the load, it protects your lower back while forcing maximum engagement from your core.",
     badge: "Upto 25 KGS",
+    badgeLabel: "Adjustable Capacity",
+  },
+  {
+    id: 5,
+    image: product5,
+    title: "THE AGILE ALTERNATIVE",
+    subtitle: "Precision Meets Portability",
+    description:
+      "All the precision of our 25kg flagship in a more nimble, 10kg frame. Perfect for high-repetition bodyweight work and explosive movements, this version features our signature micro-tension tech to anchor the weight to your center of gravity. Move faster, train longer, and protect your spine with a vest that moves with you, not against you.",
+    badge: "Upto 10 KGS",
     badgeLabel: "Adjustable Capacity",
   },
   {
     id: 2,
     image: product3,
     title: "HIP & THIGH TRAINER",
-    subtitle: "Full-Range Mobility & Strength",
+    subtitle: "Unlock your lower body power",
     description:
-      "Designed by biomechanics experts, this hip and thigh resistance harness targets your glutes, hip flexors, and lateral stabilizers. The ergonomic dual-strap architecture distributes resistance evenly, making it ideal for rehabilitation, athletic conditioning, and explosive power development.",
+      "Most leg workouts ignore the deep stabilizers that keep you fast and injury-free. Through all of your natural movements, this exercise works your lateral muscles, hip flexors, and glutes. Ideal for warm-ups, rehabilitation, or developing functional strength and mobility that regular weights cannot match.",
     badge: "Upto 10 KGS",
     badgeLabel: "Adjustable Capacity",
   },
@@ -34,7 +45,7 @@ const products = [
     title: "WRIST WEIGHT CUFFS",
     subtitle: "Precision Resistance Training",
     description:
-      "Engineered for targeted upper-body resistance, these premium wrist cuffs deliver consistent load during functional movements. Padded with medical-grade neoprene and secured with a dual-lock velcro strap, they stay locked in place whether you're shadow-boxing, running, or lifting.",
+      "Whether you're powering through a morning walk, adding heat to your shadow-boxing, or just moving through your day, these cuffs add that extra burn without the bulk. Designed to stay snug and move with you, they turn every motion into progress. Just strap them on and go.",
     badge: "2 KGS",
     badgeLabel: "Per Cuff",
   },
@@ -42,9 +53,9 @@ const products = [
     id: 4,
     image: product2,
     title: "ANKLE WEIGHT SYSTEM",
-    subtitle: "Lower Body Power Builder",
+    subtitle: "Make every step count",
     description:
-      "Transform every step into a strength movement with our modular ankle weight system. Featuring removable weight pouches and a secure strapless design, these ankle weights adapt to any activity — from yoga and walking to HIIT and agility drills.",
+      "Transform every step into a strength movement with our modular ankle weight system. Featuring removable weight pouches. These ankle weights adapt to any activity — from yoga and walking to HIIT and agility drills.",
     badge: "Upto 4 KGS",
     badgeLabel: "Adjustable Capacity",
   }

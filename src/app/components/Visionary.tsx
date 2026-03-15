@@ -1,5 +1,6 @@
 import { Quote } from "lucide-react";
 import drIypeCherian from "../../assets/dr-iype-cherian.jpg";
+import nscLogo from "../../assets/NeuroSurgeryCoachLogo.png";
 
 export function Visionary() {
   return (
@@ -26,10 +27,10 @@ export function Visionary() {
 
           <div className="space-y-6 text-gray-400 text-sm md:text-base leading-relaxed">
             <p>
-              A renowned neurosurgeon, educator, and innovator, Dr. Cherian is best known for inventing the surgical technique <strong>Cisternostomy</strong> for severe head injury.
+              A Renowned World class Neurosurgeon, Researcher and Prof Dr. Iype Cherian is best known for advocating ultramicro neurosurgery along with use of robotics.
             </p>
             <p>
-              Director of Neurosciences, Parul Institute of Medical Sciences and Research, Vadodara. Committee chairman of Innovation and technology committee WFNS.
+              He innovated a surgical technique <strong>CISTERNOSTOMY</strong> A revolutionary tech for reducing intracranial pressure by opening cranial cisterns - Based on Brain's cooling & cleaning theory. - To treat severe head injury.
             </p>
           </div>
         </div>
@@ -49,6 +50,20 @@ export function Visionary() {
               alt="Dr. Iype Cherian"
               className="w-full h-full object-cover object-top"
             />
+
+            {/* Logo Badge */}
+            <a 
+              href="https://neurosurgerycoach.org/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="absolute top-6 right-6 z-20 w-24 h-24 md:w-32 md:h-32 bg-white/10 backdrop-blur-md rounded-full p-2 border border-white/20 shadow-2xl transition-all duration-500 hover:scale-110 group-hover:bg-white/20"
+            >
+              <img 
+                src={nscLogo} 
+                alt="Neuro Surgery Coach Logo" 
+                className="w-full h-full object-contain filter drop-shadow-lg"
+              />
+            </a>
 
             {/* Bio stats floating on image */}
             <div className="absolute bottom-6 right-6 z-20 flex flex-col gap-2">
