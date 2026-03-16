@@ -6,6 +6,7 @@ import heroAthleteImage from "../../assets/hero-athlete.png";
 export function Hero() {
   const PRODUCTS = [
     "Elite Weighted Vest",
+    "The Agile Alternative",
     "Hip & Thigh Trainer",
     "Wrist Weight Cuffs",
     "Ankle Weight System",
