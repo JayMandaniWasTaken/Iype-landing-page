@@ -94,8 +94,9 @@ export function Hero() {
         >
           <img
             src={heroAthleteImage}
-            alt="Athlete"
+            alt="IYPE Athletiq athlete wearing a professional-grade weighted vest during training"
             className="w-full h-full object-cover object-top md:object-contain md:object-left"
+            loading="eager"
           />
           {/* Red duotone overlay */}
           <div
@@ -123,9 +124,9 @@ export function Hero() {
         </div>
 
         {/* Navigation — sits above the image */}
-        <nav className="flex justify-between items-center px-4 md:px-12 w-full z-20 relative">
+        <nav className="flex justify-between items-center px-4 md:px-12 w-full z-20 relative" aria-label="Main navigation">
           <div className="flex items-center">
-            <img src={logoImage} alt="IYPE Athletiq Logo" className="h-[80px] md:h-[140px] w-auto" />
+            <img src={logoImage} alt="IYPE Athletiq — Intensify Your Power and Endurance" className="h-[80px] md:h-[140px] w-auto" />
           </div>
 
           {/* Desktop nav links */}

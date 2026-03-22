@@ -159,8 +159,9 @@ export function Products() {
             >
               <img
                 src={product.image}
-                alt={product.title}
+                alt={`${product.title} — ${product.subtitle} by IYPE Athletiq`}
                 className="relative z-10 w-full h-auto rounded-3xl shadow-2xl object-contain bg-white/5 aspect-[4/5] md:aspect-square lg:aspect-[4/5] transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.02] p-4"
+                loading="lazy"
               />
             </div>
 

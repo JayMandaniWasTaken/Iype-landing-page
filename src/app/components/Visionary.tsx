@@ -47,8 +47,9 @@ export function Visionary() {
 
             <img
               src={drIypeCherian}
-              alt="Dr. Iype Cherian"
+              alt="Dr. Iype Cherian — Renowned neurosurgeon, researcher, and visionary behind IYPE Athletiq"
               className="w-full h-full object-cover object-top"
+              loading="lazy"
             />
 
             {/* Logo Badge */}
@@ -60,8 +61,9 @@ export function Visionary() {
             >
               <img
                 src={nscLogo}
-                alt="Neuro Surgery Coach Logo"
+                alt="Neuro Surgery Coach — neurosurgerycoach.org"
                 className="w-full h-full object-contain filter drop-shadow-lg"
+                loading="lazy"
               />
             </a>
 
