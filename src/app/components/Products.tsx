@@ -68,8 +68,17 @@ export function Products() {
   const [animDir, setAnimDir] = useState<"left" | "right" | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const progressRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const goTo = useCallback(
     (next: number) => {
@@ -86,8 +95,15 @@ export function Products() {
   const prev = () => goTo((current - 1 + products.length) % products.length);
   const next = useCallback(() => goTo((current + 1) % products.length), [current, goTo]);
 
-  // Auto-advance & progress bar
+  // Auto-advance & progress bar (disabled on mobile)
   useEffect(() => {
+    if (isMobile) {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (progressRef.current) clearInterval(progressRef.current);
+      setProgress(0);
+      return;
+    }
+
     if (isHovered) {
       if (intervalRef.current) clearInterval(intervalRef.current);
       if (progressRef.current) clearInterval(progressRef.current);
@@ -112,7 +128,7 @@ export function Products() {
       if (intervalRef.current) clearInterval(intervalRef.current);
       if (progressRef.current) clearInterval(progressRef.current);
     };
-  }, [current, isHovered, next]);
+  }, [current, isHovered, isMobile, next]);
 
   const product = products[current];
 
@@ -181,6 +197,31 @@ export function Products() {
               <span className="text-gray-500 text-sm">/</span>
               <span className="text-gray-400 text-sm">{products.length}</span>
             </div>
+
+            {/* Mobile prev/next arrows on image */}
+            <div className="absolute inset-y-0 left-0 right-0 z-20 flex items-center justify-between px-3 md:hidden pointer-events-none">
+              <button
+                onClick={prev}
+                className="pointer-events-auto w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center active:bg-[#E60000]/30 transition-all duration-200 shadow-lg"
+                aria-label="Previous product"
+              >
+                <ChevronLeft size={18} className="text-white" />
+              </button>
+              <button
+                onClick={next}
+                className="pointer-events-auto w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center active:bg-[#E60000]/30 transition-all duration-200 shadow-lg"
+                aria-label="Next product"
+              >
+                <ChevronRight size={18} className="text-white" />
+              </button>
+            </div>
+
+            {/* Mobile slide counter */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 bg-black/60 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full flex md:hidden items-center gap-1.5">
+              <span className="text-white font-bold text-xs">{current + 1}</span>
+              <span className="text-gray-500 text-xs">/</span>
+              <span className="text-gray-400 text-xs">{products.length}</span>
+            </div>
           </div>
 
           {/* Right: Product Info */}
@@ -232,8 +273,8 @@ export function Products() {
               ))}
             </div>
 
-            {/* Auto-play indicators */}
-            <div className="mt-6 pt-6 border-t border-white/5 space-y-3">
+            {/* Auto-play indicators (hidden on mobile since auto-scroll is disabled) */}
+            <div className="mt-6 pt-6 border-t border-white/5 space-y-3 hidden md:block">
               <div className="flex justify-between items-center">
                 <p className="text-[10px] text-gray-500 uppercase tracking-[0.2em] font-medium">
                   {isHovered ? (
@@ -260,8 +301,8 @@ export function Products() {
               </div>
             </div>
 
-            {/* Navigation Arrows */}
-            <div className="flex gap-4 mt-4">
+            {/* Navigation Arrows (hidden on mobile, shown on desktop) */}
+            <div className="hidden md:flex gap-4 mt-4">
               <button
                 onClick={prev}
                 className="group w-14 h-14 rounded-full border border-white/10 flex items-center justify-center hover:border-[#E60000] hover:bg-[#E60000]/10 transition-all duration-300"
