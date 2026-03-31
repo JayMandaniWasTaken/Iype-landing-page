@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+import { Instagram } from "lucide-react";
 import logoImage from "../../assets/logo.png";
 
 export function Footer() {
@@ -16,14 +16,8 @@ export function Footer() {
 
         {/* Social */}
         <nav className="flex gap-4" aria-label="Social media links">
-          <a href="#" aria-label="Follow IYPE Athletiq on Instagram" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#E60000] transition-colors">
+          <a href="https://www.instagram.com/iype_athletiq" target="_blank" rel="noopener noreferrer" aria-label="Follow IYPE Athletiq on Instagram" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#E60000] transition-colors">
             <Instagram size={16} />
-          </a>
-          <a href="#" aria-label="Follow IYPE Athletiq on Twitter" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#E60000] transition-colors">
-            <Twitter size={16} />
-          </a>
-          <a href="#" aria-label="Subscribe to IYPE Athletiq on YouTube" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#E60000] transition-colors">
-            <Youtube size={16} />
           </a>
         </nav>
 

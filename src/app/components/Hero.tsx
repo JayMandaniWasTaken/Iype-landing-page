@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ArrowDown, X, Menu } from "lucide-react";
 import logoImage from "../../assets/logo.png";
 import heroAthleteImage from "../../assets/hero-athlete.png";
@@ -14,6 +14,38 @@ export function Hero() {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [showFloatingCTA, setShowFloatingCTA] = useState(false);
+  const hasAutoShown = useRef(false);
+  const heroRef = useRef<HTMLElement>(null);
+
+  // Auto-open waitlist popup after 7 seconds (once per visit)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!hasAutoShown.current) {
+        hasAutoShown.current = true;
+        setIsDialogOpen(true);
+      }
+    }, 10000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Lock body scroll when dialog is open
+  useEffect(() => {
+    document.body.style.overflow = isDialogOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [isDialogOpen]);
+
+  // Show floating CTA after scrolling past the hero section
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowFloatingCTA(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [interestedProducts, setInterestedProducts] = useState<string[]>([]);
@@ -72,7 +104,7 @@ export function Hero() {
 
   return (
     <>
-      <section className="bg-black min-h-screen text-white flex flex-col font-['Inter',_sans-serif] relative overflow-hidden" style={{ isolation: 'isolate' }}>
+      <section ref={heroRef} className="bg-black min-h-screen text-white flex flex-col font-['Inter',_sans-serif] relative overflow-hidden" style={{ isolation: 'isolate' }}>
         {/* Full-bleed athlete image — spans behind the navbar with soft crop */}
         <div
           className="absolute inset-0 w-full md:w-[65%] h-full z-0 pointer-events-none"
@@ -97,6 +129,10 @@ export function Hero() {
             alt="IYPE Athletiq athlete wearing a professional-grade weighted vest during training"
             className="w-full h-full object-cover object-top md:object-contain md:object-left"
             loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            width={800}
+            height={1000}
           />
           {/* Red duotone overlay */}
           <div
@@ -177,162 +213,184 @@ export function Hero() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-30">
+        <div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-30 cursor-pointer"
+          onClick={() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" })}
+          role="button"
+          aria-label="Scroll to Products section"
+        >
           <ArrowDown size={16} className="text-gray-400 animate-bounce" />
           <span className="text-[10px] uppercase tracking-widest text-gray-400 font-medium">Products</span>
         </div>
 
-        {/* Waitlist Dialog */}
-        {isDialogOpen && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            style={{ backgroundColor: "rgba(0,0,0,0.75)", backdropFilter: "blur(6px)" }}
-            onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
-          >
-            <div className="relative w-full max-w-md bg-[#111] border border-white/10 rounded-2xl p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
-              style={{ animation: "dialogIn 0.25s ease" }}>
+      </section>
 
-              {/* Close Button */}
-              <button
-                onClick={handleClose}
-                className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
-              >
-                <X size={20} />
-              </button>
+      {/* Floating Join Waitlist CTA — appears after scrolling past the hero */}
+      <button
+        onClick={() => setIsDialogOpen(true)}
+        className={`fixed bottom-6 left-6 z-[9990] bg-[#E60000] hover:bg-red-700 text-white font-semibold text-xs uppercase tracking-widest px-6 py-3 rounded-full shadow-lg shadow-red-900/40 transition-all duration-300 flex items-center gap-2 font-['Inter',_sans-serif] ${
+          showFloatingCTA && !isDialogOpen
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-4 pointer-events-none"
+        }`}
+        aria-label="Join Waitlist"
+      >
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+        Join Waitlist
+      </button>
 
-              {!submitted ? (
-                <>
-                  {/* Header */}
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-8 h-[2px] bg-[#E60000]"></div>
-                    <span className="text-[#E60000] text-[10px] uppercase tracking-[0.3em] font-bold">Early Access</span>
+      {/* Waitlist Dialog — placed OUTSIDE the section so fixed positioning covers the full viewport */}
+      {isDialogOpen && (
+        <div
+          className="fixed inset-0 z-[9998] flex items-center justify-center p-4"
+          style={{ backgroundColor: "rgba(0,0,0,0.75)", backdropFilter: "blur(6px)" }}
+          onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
+        >
+          <div className="relative w-full max-w-md bg-[#111] border border-white/10 rounded-2xl p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
+            style={{ animation: "dialogIn 0.25s ease" }}>
+
+            {/* Close Button */}
+            <button
+              onClick={handleClose}
+              className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
+            >
+              <X size={20} />
+            </button>
+
+            {!submitted ? (
+              <>
+                {/* Header */}
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-[2px] bg-[#E60000]"></div>
+                  <span className="text-[#E60000] text-[10px] uppercase tracking-[0.3em] font-bold">Early Access</span>
+                </div>
+                <h2 className="font-['Bebas_Neue',_sans-serif] text-4xl tracking-wide text-white mb-2">
+                  Join the Waitlist
+                </h2>
+                <p className="text-gray-400 text-sm mb-8 leading-relaxed">
+                  Be the first to know when we launch. Get exclusive early-access and founder pricing.
+                </p>
+
+                {/* Form */}
+                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs uppercase tracking-widest text-gray-400 font-medium">Full Name</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="John Doe"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      className="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-gray-600 outline-none focus:border-[#E60000] transition-colors"
+                    />
                   </div>
-                  <h2 className="font-['Bebas_Neue',_sans-serif] text-4xl tracking-wide text-white mb-2">
-                    Join the Waitlist
-                  </h2>
-                  <p className="text-gray-400 text-sm mb-8 leading-relaxed">
-                    Be the first to know when we launch. Get exclusive early-access and founder pricing.
-                  </p>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs uppercase tracking-widest text-gray-400 font-medium">Email Address</label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="john@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-gray-600 outline-none focus:border-[#E60000] transition-colors"
+                    />
+                  </div>
 
-                  {/* Form */}
-                  <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs uppercase tracking-widest text-gray-400 font-medium">Full Name</label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="John Doe"
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        className="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-gray-600 outline-none focus:border-[#E60000] transition-colors"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs uppercase tracking-widest text-gray-400 font-medium">Email Address</label>
-                      <input
-                        type="email"
-                        required
-                        placeholder="john@example.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-gray-600 outline-none focus:border-[#E60000] transition-colors"
-                      />
-                    </div>
-
-                    {/* Interested Products */}
-                    <div className="flex flex-col gap-3">
-                      <label className="text-xs uppercase tracking-widest text-gray-400 font-medium">Interested Products</label>
-                      <div className="grid grid-cols-1 gap-2">
-                        {PRODUCTS.map((product) => {
-                          const checked = interestedProducts.includes(product);
-                          return (
-                            <label
-                              key={product}
-                              className={`flex items-center gap-3 px-4 py-3 rounded-lg border cursor-pointer transition-colors ${checked
-                                ? "border-[#E60000] bg-[#E60000]/10"
-                                : "border-white/10 bg-white/5 hover:border-white/20"
+                  {/* Interested Products */}
+                  <div className="flex flex-col gap-3">
+                    <label className="text-xs uppercase tracking-widest text-gray-400 font-medium">Interested Products</label>
+                    <div className="grid grid-cols-1 gap-2">
+                      {PRODUCTS.map((product) => {
+                        const checked = interestedProducts.includes(product);
+                        return (
+                          <label
+                            key={product}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg border cursor-pointer transition-colors ${checked
+                              ? "border-[#E60000] bg-[#E60000]/10"
+                              : "border-white/10 bg-white/5 hover:border-white/20"
+                              }`}
+                          >
+                            <div
+                              className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 border transition-colors ${checked ? "bg-[#E60000] border-[#E60000]" : "border-white/30"
                                 }`}
                             >
-                              <div
-                                className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 border transition-colors ${checked ? "bg-[#E60000] border-[#E60000]" : "border-white/30"
-                                  }`}
-                              >
-                                {checked && (
-                                  <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                  </svg>
-                                )}
-                              </div>
-                              <input
-                                type="checkbox"
-                                className="hidden"
-                                checked={checked}
-                                onChange={() => toggleProduct(product)}
-                              />
-                              <span className="text-sm text-gray-300">{product}</span>
-                            </label>
-                          );
-                        })}
-                      </div>
+                              {checked && (
+                                <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                              )}
+                            </div>
+                            <input
+                              type="checkbox"
+                              className="hidden"
+                              checked={checked}
+                              onChange={() => toggleProduct(product)}
+                            />
+                            <span className="text-sm text-gray-300">{product}</span>
+                          </label>
+                        );
+                      })}
                     </div>
+                  </div>
 
-                    {error && (
-                      <p className="text-red-400 text-xs text-center -mt-1">{error}</p>
-                    )}
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="mt-2 bg-[#E60000] hover:bg-red-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-xs uppercase tracking-widest py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
-                    >
-                      {loading ? (
-                        <>
-                          <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                          </svg>
-                          Submitting...
-                        </>
-                      ) : "Secure My Spot"}
-                    </button>
-                  </form>
-                </>
-              ) : (
-                <div className="flex flex-col items-center text-center py-6">
-                  <div className="w-16 h-16 rounded-full bg-[#E60000]/10 flex items-center justify-center mb-6">
-                    <svg className="w-8 h-8 text-[#E60000]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-6 h-[2px] bg-[#E60000]"></div>
-                    <span className="text-[#E60000] text-[10px] uppercase tracking-[0.3em] font-bold">You're In</span>
-                    <div className="w-6 h-[2px] bg-[#E60000]"></div>
-                  </div>
-                  <h2 className="font-['Bebas_Neue',_sans-serif] text-3xl tracking-wide text-white mb-3">
-                    Welcome, {fullName.split(" ")[0]}!
-                  </h2>
-                  <p className="text-gray-400 text-sm leading-relaxed mb-8">
-                    We've added <span className="text-white font-medium">{email}</span> to our waitlist. We'll reach out when we're ready to launch.
-                  </p>
+                  {error && (
+                    <p className="text-red-400 text-xs text-center -mt-1">{error}</p>
+                  )}
                   <button
-                    onClick={handleClose}
-                    className="border border-white/20 hover:border-white/50 text-white text-xs uppercase tracking-widest px-6 py-2 rounded-full transition-colors"
+                    type="submit"
+                    disabled={loading}
+                    className="mt-2 bg-[#E60000] hover:bg-red-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-xs uppercase tracking-widest py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
                   >
-                    Close
+                    {loading ? (
+                      <>
+                        <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                        </svg>
+                        Submitting...
+                      </>
+                    ) : "Secure My Spot"}
                   </button>
+                </form>
+              </>
+            ) : (
+              <div className="flex flex-col items-center text-center py-6">
+                <div className="w-16 h-16 rounded-full bg-[#E60000]/10 flex items-center justify-center mb-6">
+                  <svg className="w-8 h-8 text-[#E60000]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
                 </div>
-              )}
-            </div>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-6 h-[2px] bg-[#E60000]"></div>
+                  <span className="text-[#E60000] text-[10px] uppercase tracking-[0.3em] font-bold">You're In</span>
+                  <div className="w-6 h-[2px] bg-[#E60000]"></div>
+                </div>
+                <h2 className="font-['Bebas_Neue',_sans-serif] text-3xl tracking-wide text-white mb-3">
+                  Welcome, {fullName.split(" ")[0]}!
+                </h2>
+                <p className="text-gray-400 text-sm leading-relaxed mb-8">
+                  We've added <span className="text-white font-medium">{email}</span> to our waitlist. We'll reach out when we're ready to launch.
+                </p>
+                <button
+                  onClick={handleClose}
+                  className="border border-white/20 hover:border-white/50 text-white text-xs uppercase tracking-widest px-6 py-2 rounded-full transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
+      )}
 
-        <style>{`
+      <style>{`
         @keyframes dialogIn {
           from { opacity: 0; transform: scale(0.95) translateY(10px); }
           to   { opacity: 1; transform: scale(1) translateY(0); }
         }
       `}</style>
-      </section>
 
       {/* Mobile navigation overlay — placed OUTSIDE the section so it covers the entire viewport */}
       <div
